@@ -3,7 +3,8 @@ session_start();
 include('includes/connection.php');
 include('includes/functions.php');
 if (!isset($_SESSION['ticketID']) or !isset($_SESSION['seat'])) {
-    echo "<script>window.history.go(-1);</script>";
+    // echo "<script>window.history.go(-1);</script>";
+    header('Location: ../claiming.php');
 } else {
     $seat = $_SESSION['seat'];
     $ticketID = $_SESSION['ticketID'];
@@ -41,7 +42,11 @@ if (!isset($_SESSION['ticketID']) or !isset($_SESSION['seat'])) {
         $timeOut = trans($timeOut);
     } else {
         $status = "VACANT";
-        echo $today;
+        //  DEMO ONLY
+        $timeIn = 8;
+        $timeOut = 20;
+        $timeIn = trans($timeIn);
+        $timeOut = trans($timeOut);
     }
 }
 

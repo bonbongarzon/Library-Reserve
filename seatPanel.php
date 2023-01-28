@@ -1,3 +1,59 @@
+<?php
+
+session_start();
+include('navbar.php');
+include('includes/connection.php');
+include('includes/functions.php');
+if (!isset($_SESSION['seatCode']) && !isset($_SESSION['date'])) {
+    echo "BACK TO SeatDETAILS";
+} else {
+    $slots = "";
+    $today = date('Y-m-d');
+    $seat = $_SESSION['seatCode'];
+    $date = $_SESSION['date'];
+
+    $row = getSeat($seat);
+
+    if ($row == "Empty") {
+        echo "BACK TO SEAT DETAILS";
+    } else {
+        $seatName = $row['seatName'];
+        $des = $row['seatDes'];
+        $new_date = date("F j, Y", strtotime($date));
+
+        $slots = getSlots($seat, $date);
+
+        echo implode($slots);
+    }
+
+
+
+
+    // $sql = "SELECT * FROM `seats` WHERE `seatCode` LIKE '$seat'";
+    // $result = mysqli_query($conn, $sql);
+
+    // if ($row = mysqli_fetch_assoc($result)) {
+
+
+    //     echo "HAS";
+    // } else {
+    //     echo "EMPTY";
+    // }
+}
+
+
+
+
+
+
+?>
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -20,105 +76,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
 
-<?php
-
-include('navbar.php');
-include('includes/connection.php');
-include('includes/checkSeatSchedule.php');
-
-$today = date('Y-m-d');
-$tomorrow = date("Y-m-d", strtotime("+1 day"));
-session_start();
-
-if (!isset($_SESSION['seatCode']) && !isset($_SESSION['date'])) {
-    echo "shala";
-} else {
-    $seatCode = $_SESSION['seatCode'];
-     $date = $_SESSION['date'];
-    
-
-    $new_date = date("F j, Y", strtotime($date));
-
-    
-    $a = "SELECT * FROM `seats` WHERE `seatCode` LIKE 'seat01A'";
-    $result = mysqli_query($conn, $a);
-
-    if ($row = mysqli_fetch_assoc($result)) {
-        $seatName = $row['seatName'];
-        $seatCode = $row['seatCode'];
-        $pic = $row['seatPic'];
-        $des = $row['seatDes'];
-
-
-        $slots = array("VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT");
-
-        $dummy = $seatCode;
-        $sql = "SELECT * FROM `reservations` WHERE `seat_id` LIKE '$dummy' AND `date` LIKE '$date'";
-        $result = mysqli_query($conn, $sql);
-        while ($row = mysqli_fetch_assoc($result)) {
-
-            $in = $row['start_time'];
-            $out = $row['end_time'];
-
-            $in = inTimeToIndex($in);
-            $out = outTimeToIndex($out);
-
-            for ($i = $in; $i <= $out; $i++) {
-                $slots[$i] = "RESERVED";
-            }
-        }
-    } else {
-        echo "No Data";
-    }
-}
-
-// if (isset($_POST['backReserve'])){
-//      $seatCode = $_POST['seat_code'];
-//     $date = $_POST['date'];
-//     $new_date = date("F j, Y", strtotime($date));
-
-//     $sql = "SELECT * FROM `seats` WHERE `seatCode` LIKE '$seatCode'";
-
-// $found = mysqli_query($conn, $sql);
-
-
-// if ($row = mysqli_fetch_assoc($found)) {
-//     $seatName = $row['seatName'];
-//     $seatCode = $row['seatCode'];
-//     $pic = $row['seatPic'];
-//     $des = $row['seatDes'];
-// } else {
-//         echo "error";
-// }
-
-// }
-
-
-// if (isset($_POST['checkAvailable'])) {
-
-//     $date = $_POST['date'];
-//     $new_date = date("F j, Y", strtotime($date));
-
-//     $today = date('Y-m-d');
-
-//     $date = $_POST['date'];
-//     $seatCode = $_POST['seat_code'];
-
-
-//     if (strtotime($date) < strtotime($today)) {
-//         echo "<script>
-// alert('Your selected date is invalid. Pick a correct one');
-// window.location.href='seatDetails.php';
-// </script>";
-//     }
-// }
 
 
 
 
 
 
-?>
+
 
 <body>
 
@@ -135,7 +99,7 @@ if (!isset($_SESSION['seatCode']) && !isset($_SESSION['date'])) {
 </div>
 </div>";
             }
-                     
+
 
             ?>
             <div>
@@ -165,11 +129,11 @@ if (!isset($_SESSION['seatCode']) && !isset($_SESSION['date'])) {
                     </div> -->
                     <form action="includes/kimmy.php" method="POST">
                         <h1>Complete your reservation here.</h1>
-                        <input type="hidden" name="seat_code" value="<?php echo $seatCode;
-                        
+                        <input type="hidden" name="seat_code" value="<?php echo $seat;
 
-                        
-                        ?>">
+
+
+                                                                        ?>">
                         <input type="hidden" name="date" value="<?php echo $date ?>" placeholder="Date">
                         <p>Reserve this seat on: <?php echo $new_date ?> <a href="seatDetails.php">Change date here</a></p>
                         <p><b>Note: </b><i>Please use your school email if you are a student, and your personal email if you are not affiliated with the school.</i></p>
@@ -213,10 +177,10 @@ if (!isset($_SESSION['seatCode']) && !isset($_SESSION['date'])) {
                 </div>
                 <img src="assets/hero-img.svg" class="art">
                 <div class="slots">
-                    <p>Slots for the date: <a href="<?php echo 'claiming.php?id=' . $seatCode ?>">Claim my reservation</a><br><b>
+                    <p>Slots for the date: <a href="<?php echo 'claiming.php?id=' . $seat  ?>">Claim my reservation</a><br><b>
                             <?php echo $new_date;
-       
-                            
+
+
                             ?>
                         </b></p>
 

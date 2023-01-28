@@ -3,6 +3,7 @@
 
 
 include("connection.php");
+include("functions.php");
 function generateChar()
 {
     $chr = rand(65, 90);
@@ -36,38 +37,44 @@ if (isset($_POST['reserve'])) {
     $in = $_POST['time-in'];
     $out = $_POST['time-out'];
 
-    if ($date > $today) {
-        if ($ticket = 0) {
-            echo "Error: Ticket Exists";
-        } else {
-            $ticket =  generate_code($conn);
+    $checkDate = strtotime($date);
 
-            $sql = "SELECT * FROM `reservations` WHERE `seat_id` LIKE '$seat_code' AND `date` LIKE '$date' AND `start_time` >= '$in' AND `end_time` <= '$out'";
-            $result = mysqli_query($conn, $sql);
-
-            if ($row = mysqli_fetch_assoc($result)) {
-                echo "<script>
-alert('Your selected date & time is already reserved. Pick other seats or time');
-window.history.go(-1);
-</script>";
-            } else {
-                // $sql = "INSERT INTO `reservations`(`ticket_id`, `seat_id`, `name`,`email`,`date`, `start_time`, `end_time`) VALUES ('$ticket','$seat_code','$name','$email','$date','$in','$out')";
-                // mysqli_query($conn, $sql);
-                session_start();
-                $_SESSION['ticket_id'] = $ticket;
-                header("Location:../reserve.php");
-            }
-        }
+    if ($date < $today) {
+        echo "Invalid Date";
+    } else if ($in > $out) {
+        echo "Invalid Time";
     } else {
-        echo "<script>
-        alert('This system don't support same-day reservation.');
-        </script>";
-        //         echo "<script>
-        // alert('This system doesn't support same-day reservation.');
-        // window.location.href='../seatPanel.php';
-        // </script>";
+
+        echo $date;
+        echo $seat_code;
+        echo $in;
+        echo $out;
+
+        $ticket = generateUniqueCode($conn);
+        $sql = "SELECT * FROM `reservations` WHERE `seat_id` LIKE '$seat_code' AND `date` LIKE '$date' AND `start_time` <= '$in' AND `end_time` > '$in'";
+        $result = mysqli_query($conn, $sql);
+
+        if ($row = mysqli_fetch_assoc($result)) {
+            echo "MISTAKE : SLOT ALREADY RESERVED";
+        } else {
+
+            $sql = "INSERT INTO `reservations`(`ticket_id`, `seat_id`, `name`,`email`,`date`, `start_time`, `end_time`,`status`) VALUES ('$ticket','$seat_code','$name','$email','$date','$in','$out','RESERVED')";
+            mysqli_query($conn, $sql);
+            session_start();
+            $_SESSION['ticket_id'] = $ticket;
+            header("Location:../reserve.php");
+        }
     }
 }
+
+
+
+
+
+
+
+
+
 
 if (isset($_POST['getReservation'])) {
     echo $seat = $_POST['seatCode'];
@@ -81,7 +88,8 @@ if (isset($_POST['getReservation'])) {
 
         header('location:../confirmClaim.php');
     } else {
-        echo "Input is not in the correct format";
+        echo "<script>alert('Ticket ID Invalid!');
+        window.location.href = '../claiming.php?id=' + '$seat';</script>";
     }
 }
 
@@ -95,6 +103,16 @@ if (isset($_POST['checkIn'])) {
     $name = $_POST['name'];
     $address = $_POST['address'];
     $contact = $_POST['contact'];
+
+    $emailCheck = "SELECT * FROM `reservations` WHERE`ticket_id`";
+    $result = mysqli_query($conn, $sql);
+    if ($row = mysqli_fetch_assoc($result)) {
+        echo "Has";
+    } else {
+        echo "<script>alert('Ticket ID Invalid!');
+        window.location.href = '../claiming.php?id=' + '$seat';</script>";
+    }
+
 
 
     $sql = "INSERT INTO `logs`(  `seat`, `ticket`, `name`, `email`, `address`, `contact`) 
@@ -113,12 +131,44 @@ if (isset($_POST['checkIn'])) {
 }
 if (isset($_POST['backReserve'])) {
 
-    $seatCode = $_POST['seat_code'];
-    $date = $_POST['date'];
+    echo $seatCode = $_POST['seat_code'];
+    echo $date = $_POST['date'];
 
     session_start();
     $_SESSION['seatCode'] = $seatCode;
     $_SESSION['date'] = $date;
 
-    header('location:../seatPanel.php');
+    // header('location:../seatPanel.php');
+}
+
+
+
+
+function generateUniqueCode($conn)
+{
+
+    $code = generateCode();
+    $query = "SELECT * FROM `reservations` WHERE `ticket_id` = '$code'";
+    $result = mysqli_query($conn, $query);
+    while (mysqli_num_rows($result) > 0) {
+        $code = generateCode();
+        $query = "SELECT * FROM codes WHERE code = '$code'";
+        $result = mysqli_query($conn, $query);
+    }
+    return $code;
+}
+
+function generateCode()
+{
+    $letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $numbers = "0123456789";
+    $code = "";
+    for ($i = 0; $i < 2; $i++) {
+        $code .= $letters[rand(0, strlen($letters) - 1)];
+    }
+    $code .= "-";
+    for ($i = 0; $i < 4; $i++) {
+        $code .= $numbers[rand(0, strlen($numbers) - 1)];
+    }
+    return $code;
 }

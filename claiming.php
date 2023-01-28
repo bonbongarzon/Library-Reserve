@@ -2,12 +2,14 @@
 
 session_start();
 
-if(isset($_SESSION['seat']) && isset($_SESSION['ticketID'])){
+if (isset($_SESSION['seat']) && isset($_SESSION['ticketID'])) {
     unset($_SESSION['seat']);
     unset($_SESSION['ticketID']);
 }
 
-
+if (!isset($_GET['id'])) {
+    header('Location:seatDetails.php');
+}
 $seatID = $_GET['id'];
 
 include('includes/connection.php');
@@ -41,7 +43,7 @@ include('includes/functions.php');
 date_default_timezone_set('Asia/Manila');
 $today = date("Y-m-d");
 
-$test = ' 15';
+// $test = ' 15';
 $t = date(' H');
 $t;
 
@@ -51,14 +53,14 @@ $result = mysqli_query($conn, $sql);
 if ($row = mysqli_fetch_assoc($result)) {
     $seatName = $row['seatName'];
     $id = $row['seatCode'];
-
-    $sql = "";
-    $sql = "SELECT * FROM `reservations` WHERE`seat_id` = '$id' AND `date` = '$today' AND `start_time` <= '$t' AND `end_time` > '$t'";
+    $seat_id = $id;
+    $sql = "SELECT * FROM `reservations` WHERE `seat_id` = '$id' AND `date` = '$today' AND `start_time` <= '$t' AND `end_time` > '$t'";
     $j = mysqli_query($conn, $sql);
 
 
     if ($o = mysqli_fetch_assoc($j)) {
-        $seat_id = $o['seat_id'];
+
+        echo $seat_id = $o['seat_id'];
         $status = $o['status'];
         $timeIn = $o['start_time'];
         $timeOut = $o['end_time'];
@@ -66,8 +68,22 @@ if ($row = mysqli_fetch_assoc($result)) {
         $timeOut = trans($timeOut);
     } else {
         $status = "VACANT";
-        echo $today;
+
     }
+    // $sql = "SELECT * FROM `reservations` WHERE `seat_id` = '$id' AND `date` = '$today' AND `start_time` <= '$t' AND `end_time` > '$t'";
+    // $j = mysqli_query($conn, $sql);
+
+
+    // if ($o = mysqli_fetch_assoc($j)) {
+    // $seat_id = $o['seat_id'];
+    // $status = $o['status'];
+    // $timeIn = $o['start_time'];
+    // $timeOut = $o['end_time'];
+    // $timeIn = trans($timeIn);
+    // $timeOut = trans($timeOut);
+    // } else {
+    //  $status = "VACANT";
+    // }
 } else {
     echo "ERROR";
 }
@@ -134,76 +150,66 @@ if ($row = mysqli_fetch_assoc($result)) {
                 <p><?php echo $status ?></p>
                 <?php
                 if ($status != "VACANT") {
+                    echo "SLOTS FOR : " . $EngDate = date("F d ,Y",strtotime($today) ) . "<br>";
                 ?>
-                    <p>From: <?php echo $timeIn . " - " . $timeOut ?></p>
+                    <p style="font-weight: bold;">From: <?php echo $timeIn . " - " . $timeOut ?></p>
 
                     <?php
-                    $slots = array("VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT");
+                    
+                    $slot = getSlots($seat_id, $today);
 
-                    $dummy = $seat_id;
-                    $sql = "SELECT * FROM `reservations` WHERE `seat_id` LIKE '$dummy' AND `date` LIKE '$today'";
-                    $result = mysqli_query($conn, $sql);
-                    if ($row = mysqli_fetch_assoc($result)) {
 
-                        $in = $row['start_time'];
-                        $out = $row['end_time'];
-
-                        $in = inTimeToIndex($in);
-                        $out = outTimeToIndex($out);
-
-                        for ($i = $in; $i <= $out; $i++) {
-                            $slots[$i] = "RESERVED";
-                        }
-                    } else {
-                        echo "no entry";
-                    }
-
-                    echo "08:00 - 09:00 AM : " . $slots[0] . "<br> ";
-                    echo "09:00 - 10:00 AM :" . $slots[1] . "<br> ";
-                    echo "10:00 - 11:00 AM : " . $slots[2] . "<br> ";
-                    echo "11:00 - 12:00 AM : " . $slots[3] . "<br> ";
-                    echo "12:00 - 01:00 PM : " . $slots[4] . "<br> ";
-                    echo "01:00 - 02:00 PM : " . $slots[5] . "<br> ";
-                    echo "02:00 - 03:00 PM : " . $slots[6] . "<br> ";
-                    echo "03:00 - 04:00 PM : " . $slots[7] . "<br> ";
-                    echo "04:00 - 05:00 PM : " . $slots[8] . "<br> ";
-                    echo "05:00 - 06:00 PM : " . $slots[9] . "<br> ";
-                    echo "06:00 - 07:00 PM : " . $slots[10] . "<br> ";
+                    
+                    echo "08:00 - 09:00 AM : " . $slot[0] . "<br> ";
+                    echo "09:00 - 10:00 AM :" . $slot[1] . "<br> ";
+                    echo "10:00 - 11:00 AM : " . $slot[2] . "<br> ";
+                    echo "11:00 - 12:00 AM : " . $slot[3] . "<br> ";
+                    echo "12:00 - 01:00 PM : " . $slot[4] . "<br> ";
+                    echo "01:00 - 02:00 PM : " . $slot[5] . "<br> ";
+                    echo "02:00 - 03:00 PM : " . $slot[6] . "<br> ";
+                    echo "03:00 - 04:00 PM : " . $slot[7] . "<br> ";
+                    echo "04:00 - 05:00 PM : " . $slot[8] . "<br> ";
+                    echo "05:00 - 06:00 PM : " . $slot[9] . "<br> ";
+                    echo "06:00 - 07:00 PM : " . $slot[10] . "<br> ";
 
                     ?>
                 <?php
                 } else {
-                    $slots = array("VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT");
+                    // $slots = array("VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT");
 
-                    $dummy = $seat_id;
-                    $sql = "SELECT * FROM `reservations` WHERE `seat_id` LIKE '$dummy' AND `date` LIKE '$today'";
-                    $result = mysqli_query($conn, $sql);
-                    if ($row = mysqli_fetch_assoc($result)) {
+                    // $dummy = $seat_id;
+                    // $sql = "SELECT * FROM `reservations` WHERE `seat_id` LIKE '$dummy' AND `date` LIKE '$today'";
+                    // $result = mysqli_query($conn, $sql);
+                    // if ($row = mysqli_fetch_assoc($result)) {
 
-                        $in = $row['start_time'];
-                        $out = $row['end_time'];
+                    //     $in = $row['start_time'];
+                    //     $out = $row['end_time'];
 
-                        $in = inTimeToIndex($in);
-                        $out = outTimeToIndex($out);
+                    //     $in = inTimeToIndex($in);
+                    //     $out = outTimeToIndex($out);
 
-                        for ($i = $in; $i <= $out; $i++) {
-                            $slots[$i] = "RESERVED";
-                        }
-                    } else {
-                        echo "no entry";
-                    }
+                    //     for ($i = $in; $i <= $out; $i++) {
+                    //         $slots[$i] = "RESERVED";
+                    //     }
+                    // } else {
+                    //     echo "no entry";
+                    // }
 
-                    echo "08:00 - 09:00 AM : " . $slots[0] . "<br> ";
-                    echo "09:00 - 10:00 AM :" . $slots[1] . "<br> ";
-                    echo "10:00 - 11:00 AM : " . $slots[2] . "<br> ";
-                    echo "11:00 - 12:00 AM : " . $slots[3] . "<br> ";
-                    echo "12:00 - 01:00 PM : " . $slots[4] . "<br> ";
-                    echo "01:00 - 02:00 PM : " . $slots[5] . "<br> ";
-                    echo "02:00 - 03:00 PM : " . $slots[6] . "<br> ";
-                    echo "03:00 - 04:00 PM : " . $slots[7] . "<br> ";
-                    echo "04:00 - 05:00 PM : " . $slots[8] . "<br> ";
-                    echo "05:00 - 06:00 PM : " . $slots[9] . "<br> ";
-                    echo "06:00 - 07:00 PM : " . $slots[10] . "<br> ";
+                    $slot = getSlots($seat_id, $today);
+
+
+                    echo "SLOTS FOR : " . $today . "<br>";
+                    echo "08:00 - 09:00 AM : " . $slot[0] . "<br> ";
+                    echo "09:00 - 10:00 AM :" . $slot[1] . "<br> ";
+                    echo "10:00 - 11:00 AM : " . $slot[2] . "<br> ";
+                    echo "11:00 - 12:00 AM : " . $slot[3] . "<br> ";
+                    echo "12:00 - 01:00 PM : " . $slot[4] . "<br> ";
+                    echo "01:00 - 02:00 PM : " . $slot[5] . "<br> ";
+                    echo "02:00 - 03:00 PM : " . $slot[6] . "<br> ";
+                    echo "03:00 - 04:00 PM : " . $slot[7] . "<br> ";
+                    echo "04:00 - 05:00 PM : " . $slot[8] . "<br> ";
+                    echo "05:00 - 06:00 PM : " . $slot[9] . "<br> ";
+                    echo "06:00 - 07:00 PM : " . $slot[10] . "<br> ";
                 }
 
 
@@ -211,17 +217,7 @@ if ($row = mysqli_fetch_assoc($result)) {
 
 
 
-                //  nowSlot($t,$slots[0]);
-                //  nowSlot($t,$slots[1]);
-                //  nowSlot($t,$slots[2]);
-                //  nowSlot($t,$slots[3]);
-                //  nowSlot($t,$slots[4]);
-                //  nowSlot($t,$slots[5]);
-                //  nowSlot($t,$slots[6]);
-                //  nowSlot($t,$slots[7]);
-                //  nowSlot($t,$slots[8]);
-                // nowSlot($t, $slots[9]);
-                // nowSlot($t, $slots[10]);
+
                 ?>
 
                 <?php if ($status == "RESERVED") {

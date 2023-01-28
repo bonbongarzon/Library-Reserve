@@ -6,7 +6,7 @@ if (!isset($_SESSION['ticket_id'])) {
 
     header("Location:seatPanel.php");
 }
-$ticket = $_SESSION['ticket_id'];
+ $ticket = $_SESSION['ticket_id'];
 
 $sql = "SELECT * FROM `reservations` WHERE `ticket_id` LIKE '$ticket'";
 $result = mysqli_query($conn, $sql);
@@ -72,7 +72,7 @@ if ($row = mysqli_fetch_assoc($result)) {
             <div>
                 <h1>Your reservation was successful! </h1>
                 <h4>Please read the information below to know more about your reservation.</h4>
-                <a href="">Know how to claim the reservation</a>
+                <a href="seatPanel.php">Know how to claim the reservation</a>
             </div>
             <div>
                 <div class="ticket" id="ticket">

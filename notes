@@ -1,1 +1,167 @@
-<div class="preview"> <?php echo '<img src="data:image/jpeg;base64,' . base64_encode($pic) . '"/>'; ?></div>
+<?php
+
+include('navbar.php');
+include('includes/connection.php');
+include('includes/functions.php');
+// include('includes/checkSeatSchedule.php');
+
+$today = date('Y-m-d');
+$tomorrow = date("Y-m-d", strtotime("+1 day"));
+session_start();
+
+if (!isset($_SESSION['seatCode']) && !isset($_SESSION['date'])) {
+    echo "shala";
+} else {
+     $seatCode = $_SESSION['seatCode'];
+    $date = $_SESSION['date'];
+
+
+    $row = getSeat($seatCode);
+
+    echo $row['seatName'];
+
+    // $new_date = date("F j, Y", strtotime($date));
+
+    // $sql = "SELECT * FROM `seats` WHERE `seatCode` LIKE 'seat01A';";
+
+    // $found = mysqli_query($conn, $sql);
+
+
+    // if ($row = mysqli_fetch_assoc($found)) {
+    //     $seatName = $row['seatName'];
+    //     $seatCode = $row['seatCode'];
+    //     $pic = $row['seatPic'];
+    //     $des = $row['seatDes'];
+    // } else {
+    //     echo " error";
+    // }
+}
+
+    // $a = "SELECT * FROM `seats` WHERE `seatCode` LIKE '$seatCode'";
+    // $result = mysqli_query($conn, $a);
+
+    // if ($row = mysqli_fetch_assoc($result)) {
+    //     $seatName = $row['seatName'];
+    //      $seatCode = $row['seatCode'];
+    //     $pic = $row['seatPic'];
+    //     $des = $row['seatDes'];
+
+
+    //      $seatCode;
+    //      $date;
+    //     $slots = array("VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT");
+
+
+    //     $sql = "SELECT * FROM `reservations` WHERE`seat_id` LIKE '$seatCode' AND `date` LIKE '$date'";
+    //     $result = mysqli_query($conn, $sql);
+    //     while ($row = mysqli_fetch_assoc($result)) {
+
+    //         $in = $row['start_time'];
+    //         $out = $row['end_time'];
+
+    //         $in = inTimeToIndex($in);
+    //         $out = outTimeToIndex($out);
+
+    //         for ($i = $in; $i <= $out; $i++) {
+    //             $slots[$i] = "RESERVED";
+    //         }
+
+
+    //     }
+    // } else {
+    //     echo "No Data";
+    // }
+
+
+// if (isset($_POST['backReserve'])){
+//      $seatCode = $_POST['seat_code'];
+//     $date = $_POST['date'];
+//     $new_date = date("F j, Y", strtotime($date));
+
+//     $sql = "SELECT * FROM `seats` WHERE `seatCode` LIKE '$seatCode'";
+
+// $found = mysqli_query($conn, $sql);
+
+
+// if ($row = mysqli_fetch_assoc($found)) {
+//     $seatName = $row['seatName'];
+//     $seatCode = $row['seatCode'];
+//     $pic = $row['seatPic'];
+//     $des = $row['seatDes'];
+// } else {
+//         echo "error";
+// }
+
+// }
+
+
+// if (isset($_POST['checkAvailable'])) {
+
+//     $date = $_POST['date'];
+//     $new_date = date("F j, Y", strtotime($date));
+
+//     $today = date('Y-m-d');
+
+//     $date = $_POST['date'];
+//     $seatCode = $_POST['seat_code'];
+
+
+//     if (strtotime($date) < strtotime($today)) {
+//         echo "<script>
+// alert('Your selected date is invalid. Pick a correct one');
+// window.location.href='seatDetails.php';
+// </script>";
+//     }
+// }
+?>
+
+
+
+
+
+
+
+
+if (isset($_POST['reserve'])) {
+    date_default_timezone_set('Asia/Manila');
+    $today = date("Y-m-d");
+
+    $date = $_POST['date'];
+    $seat_code = $_POST['seat_code'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $in = $_POST['time-in'];
+    $out = $_POST['time-out'];
+
+    if ($date > $today) {
+        if ($ticket = 0) {
+            echo "Error: Ticket Exists";
+        } else {
+            $ticket =  generate_code($conn);
+
+            $sql = "SELECT * FROM `reservations` WHERE `seat_id` LIKE '$seat_code' AND `date` LIKE '$date' AND `start_time` >= '$in' AND `end_time` <= '$out'";
+            $result = mysqli_query($conn, $sql);
+
+            if ($row = mysqli_fetch_assoc($result)) {
+                echo "<script>
+alert('Your selected date & time is already reserved. Pick other seats or time');
+window.history.go(-1);
+</script>";
+            } else {
+                $sql = "INSERT INTO `reservations`(`ticket_id`, `seat_id`, `name`,`email`,`date`, `start_time`, `end_time`,`status`) VALUES ('$ticket','$seat_code','$name','$email','$date','$in','$out','RESERVED')";
+                mysqli_query($conn, $sql);
+                session_start();
+                $_SESSION['ticket_id'] = $ticket;
+                header("Location:../reserve.php");
+            }
+        }
+    } else {
+        echo "<script>
+        alert('This system don't support same-day reservation.');
+        </script>";
+        //         echo "<script>
+        // alert('This system doesn't support same-day reservation.');
+        // window.location.href='../seatPanel.php';
+        // </script>";
+    }
+}

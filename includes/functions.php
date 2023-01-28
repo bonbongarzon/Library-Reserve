@@ -1,25 +1,33 @@
 <?php
 
-function findSeatInfo($find){
+
+
+function getSeat($find)
+{
+
 
     include('includes/connection.php');
     $seat = $find;
-    $sql = "SELECT * FROM `seats` WHERE `seatCode` LIKE '$seat'";
-    $result = mysqli_query($conn, $sql);
+    $getSeat = "SELECT * FROM `seats` WHERE `seatCode` LIKE '$seat' ";
+    $results = mysqli_query($conn, $getSeat);
 
-    if ($row = mysqli_fetch_assoc($result)) {
-
-
-        return $row;
+    if ($result = mysqli_fetch_assoc($results)) {
 
 
-
-
+        return $result;
     } else {
-        echo "FUNCTION ERROR : NO DATA";
+        return "Empty";
     }
-
 }
+
+
+
+
+
+
+
+
+
 function findSeatFromSeats($data)
 {
     $test = $data;
@@ -402,4 +410,46 @@ function knowsIfVacant($time, $slot)
     if ($time == 8 && $slot == "VACANT" || $slot == "OCCUPIED") {
         echo "<a href='../seatDetails.php'>Reserve this seat</a>";
     }
+}
+
+
+function getSlots($seat, $date)
+{
+    include('connection.php');
+    $seat = $seat;
+    $date = $date;
+
+    $slots = array("VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT", "VACANT");
+
+    $dummy = $seat;
+    $sql = "SELECT * FROM `reservations` WHERE `seat_id` LIKE '$dummy' AND `date` LIKE '$date'";
+    $result = mysqli_query($conn, $sql);
+
+
+    foreach ($result as $row) {
+
+         $in = $row['start_time'];
+         $out = $row['end_time'];
+
+
+        $in = inTimeToIndex($in);
+        $out = outTimeToIndex($out);
+
+        for ($i = $in; $i <= $out; $i++) {
+            $slots[$i] = "RESERVED";
+        }
+    }
+    // while ($row = mysqli_fetch_assoc($result)) {
+
+    // echo $in = $row['start_time'];
+    // echo $out = $row['end_time'];
+
+
+    // $in = inTimeToIndex($in);
+    // $out = outTimeToIndex($out);
+
+    // for ($i = $in; $i <= $out; $i++) {
+    //     $slots[$i] = "RESERVED";
+    // }
+    return $slots;
 }
