@@ -1,0 +1,198 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: 0;
+    font-family: 'Poppins';
+}
+
+
+.hero-one {
+    width: 100%;
+    height: 464px;
+    background: rgba(30, 149, 49, 0.09);
+}
+
+.hero-one>div,
+.sect_two {
+
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    margin: 0px 110px;
+}
+
+.hero-one>div>div {
+    grid-column: 2/6;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 50px 0px;
+    justify-content: space-evenly
+}
+
+.hero-one>div>img {
+    grid-column: 6/8;
+    position: absolute;
+    width: 539px;
+    height: 438px;
+    left: 961px;
+    top: 132px;
+
+}
+
+.hero-one>div>div>div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.hero-one>div>div>div>a {
+    text-decoration: none;
+    width: 47%;
+    text-align: center;
+    padding: 10px 0px;
+}
+
+.hero-one>div>div>div>a:nth-child(1) {
+
+    background: #0A7848;
+    color: white;
+}
+
+.hero-one>div>div>div>a:nth-child(2) {
+    color: #0A7848;
+    background: #B9DCBD;
+    border: 1px solid #0A7848;
+}
+
+.hero-one>div>div>h1:nth-child(1) {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 100%;
+}
+
+.hero-one>div>div>h4:nth-child(2) {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 100%;
+}
+
+.sect_two>div {
+    grid-column: 2/10;
+    padding: 100px 0px;
+}
+
+.sect_two>div>span:nth-child(1) {
+    font-size: 18px;
+    line-height: 100%;
+}
+
+.sect_two>div>div:nth-child(5) {
+    background-color: #0A7848;
+    border: none;
+    color: white;
+    font-size: 14pt;
+    padding: 18px;
+}
+
+.seat-cont {
+    width: 100%;
+
+}
+
+.seat-cont>.panel>.wrap>.tab-btn {
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    color: green;
+    text-decoration: underline;
+    font-size: 14pt;
+
+
+
+}
+
+
+.accordion {
+    background-color: #EBF5EC;
+    color: #0A7848;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+    font-weight: 700;
+    font-size: 18pt;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active {
+    background-color: rgb(158, 211, 158);
+    color: #0A7848;
+}
+
+.accordion:hover {
+    background-color: rgb(158, 211, 158);
+    color: #0A7848;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+    color: black;
+    background-color: rgb(158, 211, 158);
+    padding: 0 18px;
+    background-color: none;
+    display: none;
+    overflow: hidden;
+}
+
+.panel>.wrap {
+    display: flex;
+    justify-content: space-between;
+    color: #030303;
+}
+
+.preview>img {
+    width: 400px;
+}
+
+.wrap>div:nth-child(2) {
+    padding: 20px;
+    width: 70%;
+}
+
+.wrap>div:nth-child(2) input {
+    padding: 10px;
+}
+
+.wrap>div:nth-child(2) button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #0A7848;
+    border: none;
+    color: white;
+}
+
+.wrap>div:nth-child(2) button:hover {
+    background-color: #B9DCBD;
+    color: #0A7848;
+    transition: 0.2s;
+    font-weight: bold;
+}
+
+
+.alert-semi {
+    padding: 20px;
+    background-color: #FDDADA;
+    border: solid 2px #EE7474;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+
+.art {
+    position: absolute;
+    right: 200px;
+}

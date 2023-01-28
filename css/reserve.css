@@ -1,0 +1,147 @@
+.hero-one {
+    width: 100%;
+    height: 450px;
+    background: rgba(30, 149, 49, 0.09);
+}
+
+
+
+.hero-one .reserve-wrap {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    margin: 0px 110px;
+}
+
+.hero-one .reserve-wrap>div:nth-child(1) {
+
+    grid-column: 2/6;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    justify-content: space-evenly
+}
+
+.hero-one .reserve-wrap>div:nth-child(1)>h1 {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 44px;
+    line-height: 100%;
+    /* or 44px */
+
+
+    color: #000000;
+
+}
+
+.hero-one .reserve-wrap>div:nth-child(1)>h4 {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 100%;
+    /* or 24px */
+
+
+    color: #000000;
+
+}
+
+
+.hero-one .reserve-wrap>div:nth-child(2) {
+    grid-column: 7/10;
+    padding-top: 50px;
+}
+
+.hero-one .reserve-wrap>div:nth-child(2)>div {
+    border-radius: 20px;
+    background-color: #0A7848;
+    color: white;
+    padding: 40px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+.ticket >div:nth-child(1)>img{
+height: 50px;
+transform: scale(0.5);
+
+}
+.ticket >div:nth-child(1){
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+
+}
+.ticket >div:nth-child(1)>h1{
+    font-weight: 500;
+font-size: 24px;
+line-height: 100%;
+/* identical to box height, or 24px */
+
+text-align: center;
+color: #FFFFFF;
+}
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(1),
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(2),
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(3),
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(4),
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(13) {
+    grid-column: 1/7;
+    text-align: center;
+}
+
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(5),
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(7),
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(9)
+ {
+
+    grid-column: 1/4;
+}
+
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(6),
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(8),
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(10),
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(12) {
+    padding: 5px;
+    grid-column: 4/7;
+    text-align: right;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 100%;
+    ;
+}
+
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(3) {
+    font-weight: 500;
+    margin-top: 30px;
+}
+
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(4) {
+    margin: 0px 0px 20px 0px;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 100%;
+    /* identical to box height, or 34px */
+
+    text-align: center;
+    text-decoration-line: underline;
+
+    color: #FFFFFF;
+}
+
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(13) {
+    background-color: #FFFFFF;
+    color:black;
+    grid-column: 2/6;
+    padding: 5px;
+    border-radius: 15px;
+    text-decoration: none;
+    font-weight: 600;
+}
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(13):hover{
+    
+    color: #0A7848;
+}
+.hero-one .reserve-wrap>div:nth-child(2)>div :nth-child(11){
+    grid-column: 1/4;
+}

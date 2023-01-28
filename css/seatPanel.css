@@ -1,0 +1,53 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: 0;
+    font-family: 'Poppins';
+}
+
+.seat-panel-hero-one{
+display: grid;
+    grid-template-columns: repeat(10,1fr);
+    margin: 0px 110px;
+}
+
+.seat-panel-hero-one > div{
+    grid-column: 2/10;
+}
+
+.reserved {
+    color:red;
+}
+
+.vacant {
+    color:black;
+}
+
+.seat-panel-hero-one .slots table tr td:nth-child(odd){
+text-align: center;
+padding: 5px 20px;
+}
+
+
+form {
+    background-color: rgb(158, 211, 158);
+    padding: 20px;
+    color: white;
+    border-left: #0A7848 solid 10px;
+    border-radius: 5px;
+    
+}
+
+
+form select , form input {
+    padding: 5px;
+    border: none;
+
+}
+
+form button {
+    padding: 5px 20px;
+    border: none;
+    background-color: #0A7848;
+    color: white;
+}

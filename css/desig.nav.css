@@ -1,0 +1,37 @@
+@import url('satoshi.css');
+
+*{    padding: 0;
+    margin: 0;
+    box-sizing: 0;
+    font-family: 'Poppins';
+}
+
+nav{
+    height: 50px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+}
+nav > div {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(10,1fr);
+    margin: 0px 140px;
+}
+nav div .seatX{
+    grid-column: 2/3;
+}
+nav div > div {
+    grid-column: 7/10;
+    display: flex;
+    justify-content: space-between;
+}
+nav div > div > div{
+    width: 70px;
+}
+
+nav div > div a{
+text-decoration: none;
+color: black;
+}    
