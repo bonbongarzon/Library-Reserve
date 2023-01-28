@@ -22,7 +22,7 @@ $today = date("Y-m-d");
 // $test = ' 15';
 $t = date(' H');
 $t;
-$t = $dummy_Time = "11";
+
 
 $sql = "SELECT * FROM `seats` WHERE `seatCode` LIKE '$seatID'";
 $result = mysqli_query($conn, $sql);
