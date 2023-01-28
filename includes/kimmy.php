@@ -104,43 +104,96 @@ if (isset($_POST['checkIn'])) {
     $address = $_POST['address'];
     $contact = $_POST['contact'];
 
-    $emailCheck = "SELECT * FROM `reservations` WHERE`ticket_id`";
-    $result = mysqli_query($conn, $sql);
-    if ($row = mysqli_fetch_assoc($result)) {
-        echo "Has";
+
+    $ticketData = findTicket($seat, $ticket, $conn);
+
+
+
+    if ($ticketData == "No Ticket") {
+
+        echo "<script>
+        alert('Can't find ticket information from the database')
+        window.location.href = '../claiming.php'</script>";
     } else {
-        echo "<script>alert('Ticket ID Invalid!');
-        window.location.href = '../claiming.php?id=' + '$seat';</script>";
-    }
+
+        if ($email != $ticketData['email']) {
+            echo "<script>
+            alert('Email didn't match')
+            window.location.href = '../confirmClaim.php'</script>";
+        } else {
 
 
+            $sql = "INSERT INTO `logs`(  `seat`, `ticket`, `name`, `email`, `address`, `contact`) 
+            VALUES ('$seat','$ticket','$email','$name ','$address','$contact')";
 
-    $sql = "INSERT INTO `logs`(  `seat`, `ticket`, `name`, `email`, `address`, `contact`) 
-    VALUES ('$seat','$ticket','$email','$name ','$address','$contact')";
+            if (mysqli_query($conn, $sql)) {
 
-    if (mysqli_query($conn, $sql)) {
-
-        $changeStatus = "UPDATE `reservations` SET `status`='OCCUPIED' WHERE `ticket_id` LIKE '$ticket'";
-        if (mysqli_query($conn, $changeStatus)) {
-            echo "<script>alert('You are checked-in successfully. Enjoy!');
-        window.location.href = '../claiming.php?id=' + '$seat';</script>";
+                $changeStatus = "UPDATE `reservations` SET `status`='OCCUPIED' WHERE `ticket_id` LIKE '$ticket'";
+                if (mysqli_query($conn, $changeStatus)) {
+                    echo "<script>alert('You are checked-in successfully. Enjoy!');
+                window.location.href = '../claiming.php?id=' + '$seat';</script>";
+                }
+            } else {
+                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            }
         }
-    } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
     }
+
+
+
+
+
+    // $emailCheck = "SELECT * FROM `reservations` WHERE`ticket_id`";
+    // $result = mysqli_query($conn, $sql);
+    // if ($row = mysqli_fetch_assoc($result)) {
+    //     echo "Has";
+    // } else {
+    //     echo "<script>alert('Ticket ID Invalid!');
+    //     window.location.href = '../claiming.php?id=' + '$seat';</script>";
+    // }
+
+
+
+    // $sql = "INSERT INTO `logs`(  `seat`, `ticket`, `name`, `email`, `address`, `contact`) 
+    // VALUES ('$seat','$ticket','$email','$name ','$address','$contact')";
+
+    // if (mysqli_query($conn, $sql)) {
+
+    //     $changeStatus = "UPDATE `reservations` SET `status`='OCCUPIED' WHERE `ticket_id` LIKE '$ticket'";
+    //     if (mysqli_query($conn, $changeStatus)) {
+    //         echo "<script>alert('You are checked-in successfully. Enjoy!');
+    //     window.location.href = '../claiming.php?id=' + '$seat';</script>";
+    //     }
+    // } else {
+    //     echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    // }
 }
 if (isset($_POST['backReserve'])) {
 
-    echo $seatCode = $_POST['seat_code'];
-    echo $date = $_POST['date'];
+    $seatCode = $_POST['seat_code'];
+    $date = $_POST['date'];
 
     session_start();
     $_SESSION['seatCode'] = $seatCode;
     $_SESSION['date'] = $date;
 
-    // header('location:../seatPanel.php');
+    header('location:../seatPanel.php');
 }
 
+if (isset($_POST['backReserve2'])) {
+
+    $seatCode = $_POST['seat_code'];
+    $date = $_POST['date'];
+
+    session_start();
+    unset($_SESSION['seatCode']);
+    unset($_SESSION['date']);
+    $seatCode;
+    $date;
+    $_SESSION['findSeat'] = $seatCode;
+
+    header('location:../seatDetails.php');
+}
 
 
 

@@ -14,38 +14,15 @@ $seatID = $_GET['id'];
 
 include('includes/connection.php');
 include('includes/functions.php');
+$dummy_Time = "11";
 
-// date_default_timezone_set('Asia/Manila');
-// $today = date("Y-m-d");
-
-// $t = date(' H');
-
-// $sql = "SELECT * FROM `seats` WHERE `seatCode` LIKE '$seatID'";
-// $result = mysqli_query($conn, $sql);
-// if ($row = mysqli_fetch_assoc($result)){
-//     echo $seatName = $row['seatName'];
-//     echo $id = $row['seatCode'];
-
-//     $getStatus = "SELECT * FROM `reservations` WHERE`seat_id` = '$id' AND `date` = '$today' AND `start_time` <= '$t' AND `end_time` > '$t'";
-//     $j = mysqli_query($conn, $getStatus);
-//     if ($o = mysqli_fetch_assoc($j)) {
-//         $status = $o['status'];
-//         $timeIn = $o['start_time'];
-//         $timeOut = $o['end_time'];
-//         $timeIn = trans($timeIn);
-//         $timeOut = trans($timeOut);
-//     } else {
-//         echo "no data";
-//     }
-// } else {
-//     echo "no Seat ID";
-// }
 date_default_timezone_set('Asia/Manila');
 $today = date("Y-m-d");
 
 // $test = ' 15';
 $t = date(' H');
 $t;
+$t = $dummy_Time = "11";
 
 $sql = "SELECT * FROM `seats` WHERE `seatCode` LIKE '$seatID'";
 $result = mysqli_query($conn, $sql);
@@ -60,7 +37,7 @@ if ($row = mysqli_fetch_assoc($result)) {
 
     if ($o = mysqli_fetch_assoc($j)) {
 
-        echo $seat_id = $o['seat_id'];
+         $seat_id = $o['seat_id'];
         $status = $o['status'];
         $timeIn = $o['start_time'];
         $timeOut = $o['end_time'];
@@ -85,7 +62,9 @@ if ($row = mysqli_fetch_assoc($result)) {
     //  $status = "VACANT";
     // }
 } else {
-    echo "ERROR";
+    echo "<script>
+            alert('Seat can't find')
+            window.location.href = '../confirmClaim.php'</script>";
 }
 
 
@@ -238,11 +217,11 @@ if ($row = mysqli_fetch_assoc($result)) {
                 <?php
                 } else {
                     $tomorrow = date("Y-m-d", strtotime("+1 day"));
-                    echo ' <form action="includes/kimmy.php" method="POST">
+                    echo ' <form action="seatPanel.php" method="POST">
                     <input type="hidden" name="seat_code" id="" value="' ?> <?php echo $id . '">
                     <input type="hidden" name="date" id="" value="' ?> <?php echo $tomorrow . ' ">
 
-                    <button type="submit" name="backReserve" >Reserve this Seat</button>
+                    <button type="submit" name="reserveThisSeat" >Reserve this Seat</button>
                 </form>';
                                                                     } ?>
 

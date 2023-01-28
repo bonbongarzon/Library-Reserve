@@ -1,3 +1,15 @@
+<?php
+
+if(isset($_GET['findSeat'])){
+    $find = $_GET['findSeat'];
+} else {
+    $find = "seats";
+}
+
+
+
+?>
+
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -44,7 +56,7 @@
                 <h1>Library Reserve</h1>
                 <h4>Maximize your productivity with a reserved seat at the library - reserve your seat today!</h4>
                 <div>
-                    <a href=""> <span><img src="assets/icons/search.svg" alt=""></span> Find a seat</a>
+                    <a href="#<?php echo $find?>"> <span><img src="assets/icons/search.svg" alt=""></span> Find a seat</a>
                     <a href=""> Student Login</a>
                 </div>
                 <p>Know more about the OSRS. </p>
@@ -81,9 +93,10 @@
 
 
             foreach ($rows as $row) { ?>
-                <div class="seat-cont">
+                <div class="seat-cont" id="seats"
+>
                     <!-- <div class="close"> -->
-                    <button class="accordion"><?php echo $row['seatName'] ?></button>
+                    <button class="accordion" ><?php echo $row['seatName'] ?></button>
 
                     <!-- </div> -->
                     <div class="panel">

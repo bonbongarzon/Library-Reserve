@@ -4,6 +4,9 @@ session_start();
 include('navbar.php');
 include('includes/connection.php');
 include('includes/functions.php');
+
+
+
 if (!isset($_SESSION['seatCode']) && !isset($_SESSION['date'])) {
     echo "BACK TO SeatDETAILS";
 } else {
@@ -23,7 +26,6 @@ if (!isset($_SESSION['seatCode']) && !isset($_SESSION['date'])) {
 
         $slots = getSlots($seat, $date);
 
-        echo implode($slots);
     }
 
 

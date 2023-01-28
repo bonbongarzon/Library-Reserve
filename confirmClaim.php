@@ -2,6 +2,8 @@
 session_start();
 include('includes/connection.php');
 include('includes/functions.php');
+// $_SESSION['ticketID'] = "SI-1522";
+// $_SESSION['seat'] = "seat01A";
 if (!isset($_SESSION['ticketID']) or !isset($_SESSION['seat'])) {
     // echo "<script>window.history.go(-1);</script>";
     header('Location: ../claiming.php');
@@ -9,44 +11,108 @@ if (!isset($_SESSION['ticketID']) or !isset($_SESSION['seat'])) {
     $seat = $_SESSION['seat'];
     $ticketID = $_SESSION['ticketID'];
 
+
     $row = findSeatInfo($seat);
-    $seatName = $row['seatName'];
 
-
-
-    date_default_timezone_set('Asia/Manila');
-    $today = date("Y-m-d");
-
-    $test = ' 15';
-    $t = date(' H');
-    $t;
-
-    $sql = "SELECT * FROM `reservations` WHERE`seat_id` = '$seat' AND `date` = '$today' AND `start_time` <= '$t' AND `end_time` > '$t'";
-    $j = mysqli_query($conn, $sql);
-
-
-    if ($o = mysqli_fetch_assoc($j)) {
-
-            if($o['name']){
-                $author = "Hello, " . $o['name'];
-
-            } else {
-                $author = "Hello, How are you? ";
-            }
-        
-        $seat_id = $o['seat_id'];
-        $status = $o['status'];
-        $timeIn = $o['start_time'];
-        $timeOut = $o['end_time'];
-        $timeIn = trans($timeIn);
-        $timeOut = trans($timeOut);
+    if ($row == "error") {
+        echo "<script>
+        alert('Can't find seat information from the database')
+        window.location.href = '../claiming.php'</script>";
     } else {
-        $status = "VACANT";
-        //  DEMO ONLY
-        $timeIn = 8;
-        $timeOut = 20;
-        $timeIn = trans($timeIn);
-        $timeOut = trans($timeOut);
+
+
+        $seat = $row['seatCode'];
+        $seatName = $row['seatName'];
+
+
+
+
+
+        $ticketData = findTicket($seat, $ticketID, $conn);
+
+
+        if ($ticketData == "No Ticket") {
+            echo "<script>
+            alert('Can't find ticket information from the database')
+            window.location.href = '../claiming.php'</script>";
+        }
+
+
+        // echo implode($ticketData);
+
+        $t = date(' H');
+        $test = "11";
+        $timeIn = $ticketData['start_time'];
+        $timeOut = $ticketData['end_time'];
+        $author = $ticketData['name'];
+
+        if($ticketData['name']){
+            $author = 'How are you, '.$ticketData['name'] ."?";
+        } else {
+            $author = "Welcome to the Library";
+        }
+
+
+        if ($timeIn > $t or $timeOut < $t) {
+            echo "<script>
+            alert('Your reservation is set from" . trans($timeIn) .  " to " . trans($timeOut)  . "')
+            window.location.href = '../claiming.php'</script>";
+        }
+
+
+
+
+
+
+
+
+
+        // date_default_timezone_set('Asia/Manila');
+        // $today = date("Y-m-d");
+
+        // $test = "11";
+        // $t = date(' H');
+        // $t;
+
+        // $sql = "SELECT * FROM `reservations` WHERE`seat_id` = '$seat' AND `date` = '$today' AND `ticket_id` LIKE '$ticketID'";
+        // $j = mysqli_query($conn, $sql);
+
+
+        // if ($o = mysqli_fetch_assoc($j)) {
+
+        //     if ($o['name']) {
+        //         $author = "Hello, " . $o['name'];
+        //     } else {
+        //         $author = "Hello, How are you? ";
+        //     }
+
+
+
+
+
+        //     $seat_id = $o['seat_id'];
+        //     $status = $o['status'];
+        //     $timeIn = $o['start_time'];
+        //     $timeOut = $o['end_time'];
+
+        //     $test;
+        //     if ($timeIn > $test or $timeOut < $test) {
+        // echo "<script>
+        // alert('Your reservation is set from" . trans($timeIn) .  " to " . trans($timeOut)  . "')
+        // window.location.href = '../claiming.php'</script>";
+        //     } else {
+        //         $timeIn = trans($timeIn);
+        //         $timeOut = trans($timeOut);
+        //     }
+        //     $timeIn = trans($timeIn);
+        //     $timeOut = trans($timeOut);
+        // } else {
+        //     $status = "VACANT";
+
+
+        // }
+        // $timeIn = trans($timeIn);
+        // $timeOut = trans($timeOut);
     }
 }
 
@@ -109,12 +175,12 @@ if (!isset($_SESSION['ticketID']) or !isset($_SESSION['seat'])) {
                 <p><?php echo $ticketID ?></p>
 
 
-                <span>From:<?php echo $timeIn ?> - <?php echo $timeOut ?></span>
-                 <span class="greeting"><?php echo $author?>.</span>   
+                <span>From:<?php echo trans($timeIn) ?> - <?php echo trans($timeOut) ?></span>
+                <span class="greeting"><?php echo $author ?></span>
                 <form action="includes/kimmy.php" method="post">
                     <p><i>Please fill-in the necessary fields</i></p>
-                    <input type="hidden" name="seat" id="" value="<?php echo $seat?>">
-                    <input type="hidden" name="ticket" id="" value="<?php echo $ticketID?>">
+                    <input type="hidden" name="seat" id="" value="<?php echo $seat ?>">
+                    <input type="hidden" name="ticket" id="" value="<?php echo $ticketID ?>">
                     <input type="email" name="email" id="" placeholder="Insert your email here">
                     <input type="text" name="name" id="" placeholder="Full Name">
                     <input type="text" name="address" id="" placeholder="Address">
