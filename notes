@@ -165,3 +165,84 @@ window.history.go(-1);
         // </script>";
     }
 }
+
+
+
+
+
+
+
+
+
+//CLAIMING PHP
+<?php
+
+session_start();
+
+if (isset($_SESSION['seat']) && isset($_SESSION['ticketID'])) {
+    unset($_SESSION['seat']);
+    unset($_SESSION['ticketID']);
+}
+
+if (!isset($_GET['id'])) {
+    header('Location:seatDetails.php');
+}
+$seatID = $_GET['id'];
+
+include('includes/connection.php');
+include('includes/functions.php');
+$dummy_Time = "11";
+
+date_default_timezone_set('Asia/Manila');
+$today = date("Y-m-d");
+
+// $test = ' 15';
+$t = date(' H');
+$t;
+
+
+$sql = "SELECT * FROM `seats` WHERE `seatCode` LIKE '$seatID'";
+$result = mysqli_query($conn, $sql);
+
+if ($row = mysqli_fetch_assoc($result)) {
+    $seatName = $row['seatName'];
+    $id = $row['seatCode'];
+    $seat_id = $id;
+    $sql = "SELECT * FROM `reservations` WHERE `seat_id` = '$id' AND `date` = '$today' AND `start_time` <= '$t' AND `end_time` > '$t'";
+    $j = mysqli_query($conn, $sql);
+
+
+    if ($o = mysqli_fetch_assoc($j)) {
+
+         $seat_id = $o['seat_id'];
+        $status = $o['status'];
+        $timeIn = $o['start_time'];
+        $timeOut = $o['end_time'];
+        $timeIn = trans($timeIn);
+        $timeOut = trans($timeOut);
+    } else {
+        $status = "VACANT";
+
+    }
+    // $sql = "SELECT * FROM `reservations` WHERE `seat_id` = '$id' AND `date` = '$today' AND `start_time` <= '$t' AND `end_time` > '$t'";
+    // $j = mysqli_query($conn, $sql);
+
+
+    // if ($o = mysqli_fetch_assoc($j)) {
+    // $seat_id = $o['seat_id'];
+    // $status = $o['status'];
+    // $timeIn = $o['start_time'];
+    // $timeOut = $o['end_time'];
+    // $timeIn = trans($timeIn);
+    // $timeOut = trans($timeOut);
+    // } else {
+    //  $status = "VACANT";
+    // }
+} else {
+    echo "<script>
+            alert('Seat can't find')
+            window.location.href = '../confirmClaim.php'</script>";
+}
+
+
+?>

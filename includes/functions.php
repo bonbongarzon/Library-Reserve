@@ -26,7 +26,7 @@ function findTicket($seat, $ticket, $conn)
     
     date_default_timezone_set('Asia/Manila');
     $today = date("Y-m-d");
-    $sql = "SELECT * FROM `reservations` WHERE`seat_id` = '$seat' AND `date` = '$today' AND `ticket_id` LIKE '$ticket'";
+    $sql = "SELECT * FROM `reservations` WHERE `seat_id` = 'Table 1A' AND `date` = '$today' AND `ticket_id` LIKE '$ticket'";
     $j = mysqli_query($conn, $sql);
 
 
@@ -34,6 +34,23 @@ function findTicket($seat, $ticket, $conn)
         return $o;
     } else {
         return "No Ticket";
+    }
+}
+
+function findTicketInfo($seat, $ticket, $conn)
+{
+    
+    date_default_timezone_set('Asia/Manila');
+    $today = date("Y-m-d");
+   
+    $sql = "SELECT * FROM `reservations` WHERE `seat_id` = '$seat' AND `date` = '$today' AND `ticket_id` LIKE '$ticket'";
+    $j = mysqli_query($conn, $sql);
+
+
+    if ($o = mysqli_fetch_assoc($j)) {
+        return $o;
+    } else {
+        return 0;
     }
 }
 

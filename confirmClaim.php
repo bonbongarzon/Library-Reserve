@@ -13,7 +13,7 @@ if (!isset($_SESSION['ticketID']) or !isset($_SESSION['seat'])) {
 
 
     $row = findSeatInfo($seat);
-
+    
     if ($row == "error") {
         echo "<script>
         alert('Can't find seat information from the database')
@@ -26,12 +26,22 @@ if (!isset($_SESSION['ticketID']) or !isset($_SESSION['seat'])) {
 
 
 
+        // date_default_timezone_set('Asia/Manila');
+        // $today = date("Y-m-d");
+        // $sql = "SELECT * FROM `reservations` WHERE`seat_id` = '$seat' AND `date` = '$today' AND `ticket_id` LIKE '$ticket'";
+        // $j = mysqli_query($conn, $sql);
+    
+    
+        // if ($o = mysqli_fetch_assoc($j)) {
+        //     $ticketData = $o;
+        // } else {
+           
+        // }
 
+        $ticketData = findTicketInfo($seat, $ticketID, $conn);
+        // echo implode($ticketData);
 
-        $ticketData = findTicket($seat, $ticketID, $conn);
-
-
-        if ($ticketData == "No Ticket") {
+        if ($ticketData == 0) {
             echo "<script>
             alert('Can't find ticket information from the database')
             window.location.href = '../claiming.php'</script>";
@@ -42,7 +52,7 @@ if (!isset($_SESSION['ticketID']) or !isset($_SESSION['seat'])) {
 
         $t = date(' H');
         $test = "11";
-        $timeIn = $ticketData['start_time'];
+       $timeIn = $ticketData['start_time'];
         $timeOut = $ticketData['end_time'];
         $author = $ticketData['name'];
 
