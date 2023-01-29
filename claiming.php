@@ -37,7 +37,7 @@ if ($row = mysqli_fetch_assoc($result)) {
 
     if ($o = mysqli_fetch_assoc($j)) {
 
-         $seat_id = $o['seat_id'];
+        $seat_id = $o['seat_id'];
         $status = $o['status'];
         $timeIn = $o['start_time'];
         $timeOut = $o['end_time'];
@@ -45,7 +45,6 @@ if ($row = mysqli_fetch_assoc($result)) {
         $timeOut = trans($timeOut);
     } else {
         $status = "VACANT";
-
     }
     // $sql = "SELECT * FROM `reservations` WHERE `seat_id` = '$id' AND `date` = '$today' AND `start_time` <= '$t' AND `end_time` > '$t'";
     // $j = mysqli_query($conn, $sql);
@@ -129,27 +128,29 @@ if ($row = mysqli_fetch_assoc($result)) {
                 <p><?php echo $status ?></p>
                 <?php
                 if ($status != "VACANT") {
-                    echo "SLOTS FOR : " . $EngDate = date("F d ,Y",strtotime($today) ) . "<br>";
+                    echo "SLOTS FOR : " . $EngDate = date("F d ,Y", strtotime($today)) . "<br>";
                 ?>
                     <p style="font-weight: bold;">From: <?php echo $timeIn . " - " . $timeOut ?></p>
 
                     <?php
-                    
+
                     $slot = getSlots($seat_id, $today);
 
 
-                    
-                    echo "08:00 - 09:00 AM : " . $slot[0] . "<br> ";
-                    echo "09:00 - 10:00 AM :" . $slot[1] . "<br> ";
-                    echo "10:00 - 11:00 AM : " . $slot[2] . "<br> ";
-                    echo "11:00 - 12:00 AM : " . $slot[3] . "<br> ";
-                    echo "12:00 - 01:00 PM : " . $slot[4] . "<br> ";
-                    echo "01:00 - 02:00 PM : " . $slot[5] . "<br> ";
-                    echo "02:00 - 03:00 PM : " . $slot[6] . "<br> ";
-                    echo "03:00 - 04:00 PM : " . $slot[7] . "<br> ";
-                    echo "04:00 - 05:00 PM : " . $slot[8] . "<br> ";
-                    echo "05:00 - 06:00 PM : " . $slot[9] . "<br> ";
-                    echo "06:00 - 07:00 PM : " . $slot[10] . "<br> ";
+                    // echo "SLOTS FOR : " . $today . "<br>";
+                    // echo "08-09 :  " . $slot[0] . "<br> ";
+                    // echo "09-10 :  " . $slot[1] . "<br> ";
+                    // echo "10-11 :  " . $slot[2] . "<br> ";
+                    // echo "11-12 :  " . $slot[3] . "<br> ";
+                    // echo "12-01 :  " . $slot[4] . "<br> ";
+                    // echo "01-02 :  " . $slot[5] . "<br> ";
+                    // echo "03-03 :  " . $slot[6] . "<br> ";
+                    // echo "03-04 :  " . $slot[7] . "<br> ";
+                    // echo "04-05 :  " . $slot[8] . "<br> ";
+                    // echo "05-06 :  " . $slot[9] . "<br> ";
+                    // echo "06-07 :  " . $slot[10] . "<br> ";
+
+
 
                     ?>
                 <?php
@@ -177,18 +178,18 @@ if ($row = mysqli_fetch_assoc($result)) {
                     $slot = getSlots($seat_id, $today);
 
 
-                    echo "SLOTS FOR : " . $today . "<br>";
-                    echo "08:00 - 09:00 AM : " . $slot[0] . "<br> ";
-                    echo "09:00 - 10:00 AM :" . $slot[1] . "<br> ";
-                    echo "10:00 - 11:00 AM : " . $slot[2] . "<br> ";
-                    echo "11:00 - 12:00 AM : " . $slot[3] . "<br> ";
-                    echo "12:00 - 01:00 PM : " . $slot[4] . "<br> ";
-                    echo "01:00 - 02:00 PM : " . $slot[5] . "<br> ";
-                    echo "02:00 - 03:00 PM : " . $slot[6] . "<br> ";
-                    echo "03:00 - 04:00 PM : " . $slot[7] . "<br> ";
-                    echo "04:00 - 05:00 PM : " . $slot[8] . "<br> ";
-                    echo "05:00 - 06:00 PM : " . $slot[9] . "<br> ";
-                    echo "06:00 - 07:00 PM : " . $slot[10] . "<br> ";
+                    // echo "SLOTS FOR : " . $today . "<br>";
+                    // echo "08-09 :  " . $slot[0] . "<br> ";
+                    // echo "09-10 :  " . $slot[1] . "<br> ";
+                    // echo "10-11 :  " . $slot[2] . "<br> ";
+                    // echo "11-12 :  " . $slot[3] . "<br> ";
+                    // echo "12-01 :  " . $slot[4] . "<br> ";
+                    // echo "01-02 :  " . $slot[5] . "<br> ";
+                    // echo "03-03 :  " . $slot[6] . "<br> ";
+                    // echo "03-04 :  " . $slot[7] . "<br> ";
+                    // echo "04-05 :  " . $slot[8] . "<br> ";
+                    // echo "05-06 :  " . $slot[9] . "<br> ";
+                    // echo "06-07 :  " . $slot[10] . "<br> ";
                 }
 
 
